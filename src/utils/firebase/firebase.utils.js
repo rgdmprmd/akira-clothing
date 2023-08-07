@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 // 1. INITIALIZE - Your web app's Firebase configuration
@@ -26,6 +26,7 @@ googleProvider.setCustomParameters({
 // 2. AUTH - Config the authentication
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 // 3. INITIALIZE DB - Initialize Firestore
 export const db = getFirestore();
