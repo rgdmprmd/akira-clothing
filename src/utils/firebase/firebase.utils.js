@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 // 1. INITIALIZE - Your web app's Firebase configuration
@@ -48,7 +48,7 @@ export const createUserDocument = async (userAuth, additionalInformation) => {
 				displayName,
 				email,
 				createdAt,
-				...additionalInformation
+				...additionalInformation,
 			});
 		} catch (err) {
 			console.error(`Error creating the user ${err.message}`);
@@ -63,4 +63,10 @@ export const createUserDocument = async (userAuth, additionalInformation) => {
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
 	if (!email || !password) return;
 	return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+// 6. AUTH - Sign in with email and password method
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+	if (!email || !password) return;
+	return await signInWithEmailAndPassword(auth, email, password);
 };
