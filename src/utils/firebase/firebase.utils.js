@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 // 1. INITIALIZE - Your web app's Firebase configuration
@@ -31,7 +31,10 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const db = getFirestore();
 
 // 4. STORE AUTH - Store a user if not exist
-export const createUserDocument = async (userAuth) => {
+export const createUserDocument = async (userAuth, additionalInformation) => {
+	// First protection layer
+	if (!userAuth) return;
+
 	const userDocRef = doc(db, "users", userAuth.uid); // Search the specific doc
 	const userSnapshot = await getDoc(userDocRef); // Fetch the doc
 
@@ -45,6 +48,7 @@ export const createUserDocument = async (userAuth) => {
 				displayName,
 				email,
 				createdAt,
+				...additionalInformation
 			});
 		} catch (err) {
 			console.error(`Error creating the user ${err.message}`);
@@ -53,4 +57,10 @@ export const createUserDocument = async (userAuth) => {
 
 	// Check if userdata exists? do nothing
 	return userDocRef;
+};
+
+// 5. AUTH - Sign up with email and password method
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+	if (!email || !password) return;
+	return await createUserWithEmailAndPassword(auth, email, password);
 };
