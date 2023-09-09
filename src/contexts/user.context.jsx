@@ -13,8 +13,6 @@ export const UserProvider = ({ children }) => {
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChangedListener((user) => {
-			console.log(user);
-
 			// if user obj come through, save this into firestore
 			if (user) createUserDocument(user);
 
