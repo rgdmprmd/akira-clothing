@@ -19,8 +19,8 @@ const SignInForm = () => {
 
 	const logGoogleUser = async () => {
 		const { user } = await signInWithGooglePopup();
-		const userDocRef = await createUserDocument(user);
-		console.log(userDocRef);
+		await createUserDocument(user);
+		setCurrentUser(user);
 	};
 
 	const resetFormFields = () => {
