@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from "firebase/firestore";
 
 // 1. INITIALIZE - Your web app's Firebase configuration
 const firebaseConfig = {
@@ -76,3 +76,20 @@ export const signOutUser = () => signOut(auth);
 
 // 8. AUTH - Sign in Sign out listener from firebase
 export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
+
+// 9. SEEDER - utility to import our own json into firestore
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+	const collectionRef = collection(db, collectionKey);
+	const batch = writeBatch(db);
+
+	objectsToAdd.forEach((object) => {
+		const docRef = doc(collectionRef, object.title.toLowerCase());
+		batch.set(docRef, object);
+	});
+
+	await batch.commit();
+	console.log("done");
+
+	// HOW TO RUN THIS - setup some useEffect that will run in the first load, and after run, delete the useEffect.
+	// EXAMPLE - look at product.context
+};
